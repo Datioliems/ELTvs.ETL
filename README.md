@@ -131,10 +131,6 @@ Kết quả được đưa vào `User::LastRunObject`, sau đó Script Task ghi 
 - dbt: `logs/dbt.log`, `target/manifest.json`, `run_results.json`, compiled SQL và trang docs `target/index.html`.
 - SSMS/SQL Server: các script `.sql` và backup `sakila_dw.bak`; không tìm thấy solution `.ssmssln` riêng.
 
-## Cảnh báo bảo mật
-
-`03_AIRBYTE/airbyte_home_snapshot`, các file `.conmgr`, `abctl.kubeconfig` và `04_DBT/user_dbt_config/profiles.yml` có thể chứa thông tin kết nối hoặc chứng thư. **Không đưa toàn bộ FINALE lên GitHub/public drive trước khi xóa hoặc thay thế secret.**
-
 ## Ghi chú về sao lưu và GitHub
 
 - `D:\sakila_dw\.venv` bị loại vì chỉ là môi trường Python có thể tái tạo và không chứa model dbt của dự án.
