@@ -1,0 +1,216 @@
+================================================================
+HƯỚNG DẪN CẤU HÌNH SSIS PACKAGE TRONG SSDT (SQL Server Data Tools)
+Đề tài: Kho Dữ Liệu Sakila - Nhóm 9
+================================================================
+
+=== BƯỚC 1: CÀI ĐẶT & CHUẨN BỊ ===
+
+1.1. Cài đặt SSDT (SQL Server Data Tools):
+  - Visual Studio 2019/2022 + extension "SQL Server Integration Services Projects"
+  - Hoặc tải trực tiếp: https://learn.microsoft.com/en-us/sql/ssdt/download-sql-server-data-tools-ssdt
+
+1.2. Chuẩn bị database nguồn Sakila trên SQL Server:
+  - Tải Sakila for SQL Server tại: https://github.com/jOOQ/sakila
+  - Import vào SQL Server Management Studio (SSMS)
+  - Đặt tên database là "sakila" (đúng với tên trong scripts)
+
+1.3. Chạy scripts khởi tạo:
+  - Mở SSMS, chạy file 01_Create_DW_Schema.sql
+  - Chạy file 02_Load_Dim_Date.sql
+  => Kiểm tra: SELECT COUNT(*) FROM Sakila_DW.dw.Dim_Date (phải = 11323 dòng) // 11324 real
+
+
+=== BƯỚC 2: TẠO SSIS PROJECT TRONG SSDT ===
+
+2.1. New Project:
+  File -> New -> Project -> Business Intelligence -> Integration Services Project
+  Tên project: "Sakila_ETL"
+  Location: thư mục tùy chọn
+
+2.2. Tạo 2 Connection Managers (nhấp phải vùng Connection Managers):
+
+  [A] Connection: SourceSakila
+      Type: OLE DB
+      Server: localhost (hoặc tên SQL Server instance)
+      Database: sakila
+
+  [B] Connection: DestSakilaDW
+      Type: OLE DB
+      Server: localhost
+      Database: Sakila_DW
+
+
+=== BƯỚC 3: CẤU TRÚC SSIS PACKAGE ===
+
+Tạo file package: "ETL_Sakila_DW.dtsx"
+
+CONTROL FLOW gồm các task theo thứ tự (dùng mũi tên precedence):
+
+┌─────────────────────────────────────────────────────┐
+│  Sequence Container: "Load Dimension Tables"         │
+│                                                      │
+│  ┌──────────────────────────────┐                   │
+│  │ Execute SQL Task: Load Dim_  │                   │
+│  │ Geography_Store              │                   │
+│  │ (Dùng file 04_...sql Phần C) │                   │
+│  └──────────────┬───────────────┘                   │
+│                 ↓                                    │
+│  ┌──────────────────────────────┐                   │
+│  │ Execute SQL Task: Load       │                   │
+│  │ Dim_Staff                    │                   │
+│  └──────────────┬───────────────┘                   │
+│                 ↓                                    │
+│  ┌──────────────────────────────┐                   │
+│  │ Execute SQL Task: Load       │                   │
+│  │ Dim_Customer                 │                   │
+│  └──────────────┬───────────────┘                   │
+│                 ↓                                    │
+│  ┌──────────────────────────────┐                   │
+│  │ Execute SQL Task: Load       │                   │
+│  │ Dim_Product                  │                   │
+│  └──────────────────────────────┘                   │
+└────────────────────┬────────────────────────────────┘
+                     ↓
+┌─────────────────────────────────────────────────────┐
+│  Data Flow Task: "Load Fact_Sale"                    │
+│  (xem chi tiết Bước 4 bên dưới)                     │
+└────────────────────┬────────────────────────────────┘
+                     ↓
+┌─────────────────────────────────────────────────────┐
+│  Execute SQL Task: "Load Aggregate Facts"            │
+│  Connection: DestSakilaDW                            │
+│  SQL: [nội dung từ 05_Load_Fact_Sale.sql Bước 4]    │
+└─────────────────────────────────────────────────────┘
+
+
+=== BƯỚC 4: CẤU HÌNH TỪNG EXECUTE SQL TASK ===
+
+Cho mỗi Execute SQL Task:
+  - Connection Type: OLE DB
+  - Connection: DestSakilaDW (trừ trường hợp query nguồn)
+  - SQLStatement: Copy/paste nội dung SQL tương ứng
+
+Cách dán SQL nhiều dòng:
+  - Nhấp "..." bên cạnh ô SQLStatement
+  - Paste toàn bộ nội dung script vào
+
+
+=== BƯỚC 5: CẤU HÌNH DATA FLOW TASK "Load Fact_Sale" ===
+
+Trong DATA FLOW TAB, thêm các component:
+
+[1] OLE DB Source: "Source_Rental"
+    Connection: SourceSakila
+    SQL Command: (Query staging từ 05_Load_Fact_Sale.sql - BƯỚC 1)
+    => Trả về: rental_id, rental_date_key, return_date_key,
+               payment_date_key, customer_id, film_id,
+               staff_id, store_id, + tất cả measures
+
+[2] Lookup: "Lookup_CustomerKey"
+    Connection: DestSakilaDW
+    SQL: SELECT customer_id, customer_key FROM dw.Dim_Customer WHERE is_current=1
+    Input: customer_id (từ Source)
+    Output: customer_key -> thêm column customer_key
+
+[3] Lookup: "Lookup_ProductKey"
+    Connection: DestSakilaDW
+    SQL: SELECT film_id, product_key FROM dw.Dim_Product WHERE is_current=1
+    Input: film_id
+    Output: product_key
+
+[4] Lookup: "Lookup_StoreKey"
+    Connection: DestSakilaDW
+    SQL: SELECT store_id, store_key FROM dw.Dim_Geography_Store WHERE is_current=1
+    Input: store_id
+    Output: store_key
+
+[5] Lookup: "Lookup_StaffKey"
+    Connection: DestSakilaDW
+    SQL: SELECT staff_id, staff_key FROM dw.Dim_Staff WHERE is_current=1
+    Input: staff_id
+    Output: staff_key
+
+[6] OLE DB Destination: "Dest_FactSale"
+    Connection: DestSakilaDW
+    Table: [dw].[Fact_Sale]
+    Column Mapping:
+      rental_id              -> rental_id
+      rental_date_key        -> rental_date_key
+      return_date_key        -> return_date_key
+      payment_date_key       -> payment_date_key
+      customer_key           -> customer_key   (từ Lookup)
+      product_key            -> product_key    (từ Lookup)
+      store_key              -> store_key      (từ Lookup)
+      staff_key              -> staff_key      (từ Lookup)
+      amount                 -> amount
+      rental_duration_expected -> rental_duration_expected
+      rental_duration_actual -> rental_duration_actual
+      late_days              -> late_days
+      is_late                -> is_late
+      is_returned            -> is_returned
+      replacement_cost       -> replacement_cost
+
+Luồng kết nối:
+Source_Rental
+    -> Lookup_CustomerKey
+    -> Lookup_ProductKey
+    -> Lookup_StoreKey
+    -> Lookup_StaffKey
+    -> Dest_FactSale
+
+
+=== BƯỚC 6: CHẠY ETL HOÀN CHỈNH ===
+
+CÁCH 1: Chạy từ SSDT (Debug/Development):
+  - Nhấn F5 hoặc Debug -> Start Debugging
+  - Quan sát màu xanh (success) / đỏ (fail) từng task
+
+CÁCH 2: Deploy lên SQL Server Agent (Production):
+  - Nhấp phải Project -> Properties -> Deployment Target: SSIS Catalog
+  - Build -> Deploy
+  - Trong SSMS: Integration Services Catalogs -> SSISDB -> Tạo Job Agent
+
+CÁCH 3: Chạy script SQL trực tiếp (không cần SSIS):
+  Mở SSMS và chạy theo thứ tự:
+  1. 01_Create_DW_Schema.sql
+  2. 02_Load_Dim_Date.sql
+  3. 04_Load_Dim_Staff_Customer_Store.sql (chạy cả 3 phần A, B, C)
+  4. 03_Load_Dim_Product.sql
+  5. 05_Load_Fact_Sale.sql
+  6. 06_Master_ETL_And_Views.sql
+
+
+=== BƯỚC 7: KIỂM TRA SAU KHI LOAD ===
+
+Chạy các query kiểm tra trong file 06_Master_ETL_And_Views.sql Phần C:
+- Kết quả mong đợi:
+  * Dim_Date: ~11,323 dòng (2000-2030)
+  * Dim_Product (current): 1,000 dòng (1,000 phim Sakila)
+  * Dim_Staff (current): 2 dòng
+  * Dim_Customer (current): 599 dòng
+  * Dim_Geography_Store (current): 2 dòng
+  * Fact_Sale: ~16,044 dòng (từ bảng rental Sakila)
+
+
+=== LƯU Ý QUAN TRỌNG ===
+
+1. Nếu Sakila database ở MySQL (không phải SQL Server):
+   - Cài đặt MySQL ODBC Connector
+   - Trong SSIS dùng ADO.NET Source với MySQL driver thay vì OLE DB
+   - Hoặc dùng Linked Server trong SQL Server để kết nối MySQL
+
+2. Prefix "sakila.dbo." trong scripts:
+   - Nếu Sakila ở cùng SQL Server instance: dùng "sakila.dbo.tablename"
+   - Nếu Sakila ở MySQL: thay bằng tên DSN linked server
+
+3. SCD Type 2 trong SSIS (cách chuyên nghiệp hơn Execute SQL):
+   - Trong Data Flow, dùng component "Slowly Changing Dimension"
+   - Wizard sẽ tự tạo logic đóng bản ghi cũ và insert bản ghi mới
+
+4. Incremental Load (không cần TRUNCATE mỗi lần):
+   - Thêm cột "last_updated" vào staging
+   - Chỉ load các giao dịch mới hơn max(rental_date_key) trong Fact_Sale
+
+================================================================
+END OF GUIDE
+================================================================

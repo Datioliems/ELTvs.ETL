@@ -1,0 +1,374 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts" DTS:refId="Package" DTS:CreationDate="5/17/2026 7:42:16 AM" DTS:CreationName="Microsoft.Package" DTS:CreatorComputerName="LAPTOP-DLHGIK2D" DTS:CreatorName="LAPTOP-DLHGIK2D\ADMIN" DTS:DTSID="{8FFB4B5F-F173-4941-96D9-06603F5C586A}" DTS:ExecutableType="Microsoft.Package" DTS:LastModifiedProductVersion="17.0.1016.0" DTS:LocaleID="1033" DTS:ObjectName="Package" DTS:PackageType="5" DTS:VersionBuild="17" DTS:VersionGUID="{A1D7BB9A-1C0C-4F45-80E2-F4E11CE7C0EC}">
+  <DTS:Property DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable DTS:refId="Package\Data Flow Task" DTS:CreationName="Microsoft.Pipeline" DTS:Description="Data Flow Task" DTS:DTSID="{87A66AFF-A2E5-4DE6-9188-4682A32B8A12}" DTS:ExecutableType="Microsoft.Pipeline" DTS:LocaleID="-1" DTS:ObjectName="Data Flow Task">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline version="1">
+          <components>
+            <component refId="Package\Data Flow Task\ADO NET Source" componentClassID="Microsoft.ManagedComponentHost" contactInfo="Consumes data from SQL Server, OLE DB, ODBC, or Oracle, using the corresponding .NET Framework data provider. Use a Transact-SQL statement to define the result set. For example, extract data from SQL Server with the .NET Framework data provider for SQL Server.;Microsoft Corporation; Microsoft SQL Server; Â© Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4" description="Consumes data from SQL Server, OLE DB, ODBC, or Oracle, using the corresponding .NET Framework data provider. Use a Transact-SQL statement to define the result set. For example, extract data from SQL Server with the .NET Framework data provider for SQL Server." name="ADO NET Source" usesDispositions="true" version="4">
+              <properties>
+                <property dataType="System.String" description="Specifies the SQL statement used by the component to extract data." expressionType="Notify" name="SqlCommand" UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">SELECT * FROM sakila_crm</property>
+                <property dataType="System.Int32" description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out." name="CommandTimeout">30</property>
+                <property dataType="System.Boolean" description="Indicates whether to allow non-string external columns to be implicitly converted to strings at the output columns." name="AllowImplicitStringConversion">true</property>
+                <property dataType="System.String" description="The Source database table name." expressionType="Notify" name="TableOrViewName" UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">
+                </property>
+                <property dataType="System.Int32" description="Specify the mode to retrieve external column information" name="AccessMode" typeConverter="Microsoft.SqlServer.Dts.Pipeline.DataReaderSourceAdapter+EnumToStringConverter">1</property>
+                <property dataType="System.String" name="UserComponentTypeName">Microsoft.DataReaderSourceAdapter</property>
+              </properties>
+              <connections>
+                <connection refId="Package\Data Flow Task\ADO NET Source.Connections[IDbConnection]" connectionManagerID="{33B913B8-FAFC-4CF7-8C43-F552EDF082D1}:external" connectionManagerRefId="Project.ConnectionManagers[CM_MySQL_CRM]" description="Managed connection manager" name="IDbConnection" />
+              </connections>
+              <outputs>
+                <output refId="Package\Data Flow Task\ADO NET Source.Outputs[ADO NET Source Output]" name="ADO NET Source Output">
+                  <externalMetadataColumns isUsed="True" />
+                </output>
+                <output refId="Package\Data Flow Task\ADO NET Source.Outputs[ADO NET Source Error Output]" isErrorOut="true" name="ADO NET Source Error Output">
+                  <outputColumns>
+                    <outputColumn refId="Package\Data Flow Task\ADO NET Source.Outputs[ADO NET Source Error Output].Columns[ErrorCode]" dataType="i4" lineageId="Package\Data Flow Task\ADO NET Source.Outputs[ADO NET Source Error Output].Columns[ErrorCode]" name="ErrorCode" specialFlags="1" />
+                    <outputColumn refId="Package\Data Flow Task\ADO NET Source.Outputs[ADO NET Source Error Output].Columns[ErrorColumn]" dataType="i4" lineageId="Package\Data Flow Task\ADO NET Source.Outputs[ADO NET Source Error Output].Columns[ErrorColumn]" name="ErrorColumn" specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component refId="Package\Data Flow Task\ODBC Source" componentClassID="Microsoft.SSISODBCSrc" contactInfo="ODBC Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;1" description="ODBC Source" name="ODBC Source" usesDispositions="true" version="1">
+              <properties>
+                <property dataType="System.String" description="The name of the table to be fetched." expressionType="Notify" name="TableName">
+                </property>
+                <property dataType="System.String" description="The SQL command to be executed." expressionType="Notify" name="SqlCommand" UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=17.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">
+                </property>
+                <property dataType="System.Int32" description="Specify the number of rows fetched per batch." expressionType="Notify" name="BatchSize">1000</property>
+                <property dataType="System.Int32" description="Determines the chunk size allocation for LOB columns" expressionType="Notify" name="LobChunkSize">32768</property>
+                <property dataType="System.Boolean" description="Determines how the component exposes CHAR columns. If False, CHAR columns are exposed as (multi-)byte strings (DT_STR), if True, CHAR columns are exposed as wide strings (DT_WSTR)" expressionType="Notify" name="ExposeCharColumnsAsUnicode">false</property>
+                <property dataType="System.Int32" description="The number of seconds to wait for an SQL statement to execute before returning to the application." expressionType="Notify" name="StatementTimeout">0</property>
+                <property dataType="System.Int32" description="The code page to use when code page information is unavailable from the data source." expressionType="Notify" name="DefaultCodePage">1252</property>
+                <property dataType="System.Int32" description="The method used for fetching data." expressionType="Notify" name="FetchMethod">1</property>
+                <property dataType="System.Int32" description="The ODBC C data type for binding numeric data." expressionType="Notify" name="BindNumericAs">0</property>
+                <property dataType="System.Int32" description="Determines how the component would bind columns of (multi)-byte string types (i.e., SQL_CHAR, SQL_VARCHAR, SQL_LONGVARCHAR). The options are: Unicode (SQL_C_WCHAR) and ANSI (SQL_C_CHAR)." expressionType="Notify" name="BindCharColumnsAs">0</property>
+                <property dataType="System.Int32" description="The mode used to access the database." expressionType="Notify" name="AccessMode" typeConverter="AccessMode">0</property>
+              </properties>
+              <connections>
+                <connection refId="Package\Data Flow Task\ODBC Source.Connections[ODBCConnection]" description="The ODBC runtime connection used to access the database." name="ODBCConnection" />
+              </connections>
+              <outputs>
+                <output refId="Package\Data Flow Task\ODBC Source.Outputs[ODBC Source Output]" errorRowDisposition="FailComponent" name="ODBC Source Output" truncationRowDisposition="FailComponent">
+                  <externalMetadataColumns isUsed="True" />
+                </output>
+                <output refId="Package\Data Flow Task\ODBC Source.Outputs[ODBC Source Error Output]" isErrorOut="true" name="ODBC Source Error Output">
+                  <outputColumns>
+                    <outputColumn refId="Package\Data Flow Task\ODBC Source.Outputs[ODBC Source Error Output].Columns[ErrorCode]" dataType="i4" lineageId="Package\Data Flow Task\ODBC Source.Outputs[ODBC Source Error Output].Columns[ErrorCode]" name="ErrorCode" specialFlags="1" />
+                    <outputColumn refId="Package\Data Flow Task\ODBC Source.Outputs[ODBC Source Error Output].Columns[ErrorColumn]" dataType="i4" lineageId="Package\Data Flow Task\ODBC Source.Outputs[ODBC Source Error Output].Columns[ErrorColumn]" name="ErrorColumn" specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component refId="Package\Data Flow Task\ODBC Source 1" componentClassID="Microsoft.SSISODBCSrc" contactInfo="ODBC Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;1" description="ODBC Source" name="ODBC Source 1" usesDispositions="true" version="1">
+              <properties>
+                <property dataType="System.String" description="The name of the table to be fetched." expressionType="Notify" name="TableName">
+                </property>
+                <property dataType="System.String" description="The SQL command to be executed." expressionType="Notify" name="SqlCommand" UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=17.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">
+                </property>
+                <property dataType="System.Int32" description="Specify the number of rows fetched per batch." expressionType="Notify" name="BatchSize">1000</property>
+                <property dataType="System.Int32" description="Determines the chunk size allocation for LOB columns" expressionType="Notify" name="LobChunkSize">32768</property>
+                <property dataType="System.Boolean" description="Determines how the component exposes CHAR columns. If False, CHAR columns are exposed as (multi-)byte strings (DT_STR), if True, CHAR columns are exposed as wide strings (DT_WSTR)" expressionType="Notify" name="ExposeCharColumnsAsUnicode">false</property>
+                <property dataType="System.Int32" description="The number of seconds to wait for an SQL statement to execute before returning to the application." expressionType="Notify" name="StatementTimeout">0</property>
+                <property dataType="System.Int32" description="The code page to use when code page information is unavailable from the data source." expressionType="Notify" name="DefaultCodePage">1252</property>
+                <property dataType="System.Int32" description="The method used for fetching data." expressionType="Notify" name="FetchMethod">1</property>
+                <property dataType="System.Int32" description="The ODBC C data type for binding numeric data." expressionType="Notify" name="BindNumericAs">0</property>
+                <property dataType="System.Int32" description="Determines how the component would bind columns of (multi)-byte string types (i.e., SQL_CHAR, SQL_VARCHAR, SQL_LONGVARCHAR). The options are: Unicode (SQL_C_WCHAR) and ANSI (SQL_C_CHAR)." expressionType="Notify" name="BindCharColumnsAs">0</property>
+                <property dataType="System.Int32" description="The mode used to access the database." expressionType="Notify" name="AccessMode" typeConverter="AccessMode">0</property>
+              </properties>
+              <connections>
+                <connection refId="Package\Data Flow Task\ODBC Source 1.Connections[ODBCConnection]" connectionManagerID="{06F592D1-CF48-4F28-B36B-A36308029667}:external" connectionManagerRefId="Project.ConnectionManagers[MySQL_Inventory_ODBC]" description="The ODBC runtime connection used to access the database." name="ODBCConnection" />
+              </connections>
+              <outputs>
+                <output refId="Package\Data Flow Task\ODBC Source 1.Outputs[ODBC Source Output]" errorRowDisposition="FailComponent" name="ODBC Source Output" truncationRowDisposition="FailComponent">
+                  <externalMetadataColumns isUsed="True" />
+                </output>
+                <output refId="Package\Data Flow Task\ODBC Source 1.Outputs[ODBC Source Error Output]" isErrorOut="true" name="ODBC Source Error Output">
+                  <outputColumns>
+                    <outputColumn refId="Package\Data Flow Task\ODBC Source 1.Outputs[ODBC Source Error Output].Columns[ErrorCode]" dataType="i4" lineageId="Package\Data Flow Task\ODBC Source 1.Outputs[ODBC Source Error Output].Columns[ErrorCode]" name="ErrorCode" specialFlags="1" />
+                    <outputColumn refId="Package\Data Flow Task\ODBC Source 1.Outputs[ODBC Source Error Output].Columns[ErrorColumn]" dataType="i4" lineageId="Package\Data Flow Task\ODBC Source 1.Outputs[ODBC Source Error Output].Columns[ErrorColumn]" name="ErrorColumn" specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component refId="Package\Data Flow Task\OLE DB - HRM Source" componentClassID="Microsoft.OLEDBSource" contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7" description="OLE DB Source" name="OLE DB - HRM Source" usesDispositions="true" version="7">
+              <properties>
+                <property dataType="System.Int32" description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out." name="CommandTimeout">0</property>
+                <property dataType="System.String" description="Specifies the name of the database object used to open a rowset." name="OpenRowset">
+                </property>
+                <property dataType="System.String" description="Specifies the variable that contains the name of the database object used to open a rowset." name="OpenRowsetVariable">
+                </property>
+                <property dataType="System.String" description="The SQL command to be executed." name="SqlCommand" UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">
+                </property>
+                <property dataType="System.String" description="The variable that contains the SQL command to be executed." name="SqlCommandVariable">
+                </property>
+                <property dataType="System.Int32" description="Specifies the column code page to use when code page information is unavailable from the data source." name="DefaultCodePage">1252</property>
+                <property dataType="System.Boolean" description="Forces the use of the DefaultCodePage property value when describing character data." name="AlwaysUseDefaultCodePage">false</property>
+                <property dataType="System.Int32" description="Specifies the mode used to access the database." name="AccessMode" typeConverter="AccessMode">0</property>
+                <property dataType="System.String" description="The mappings between the parameters in the SQL command and variables." name="ParameterMapping">
+                </property>
+              </properties>
+              <connections>
+                <connection refId="Package\Data Flow Task\OLE DB - HRM Source.Connections[OleDbConnection]" connectionManagerID="{9BDEF09A-E39B-4D01-AD25-F30E07CA456E}:external" connectionManagerRefId="Project.ConnectionManagers[CM_SS_HRM]" description="The OLE DB runtime connection used to access the database." name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output refId="Package\Data Flow Task\OLE DB - HRM Source.Outputs[OLE DB Source Output]" name="OLE DB Source Output">
+                  <externalMetadataColumns isUsed="True" />
+                </output>
+                <output refId="Package\Data Flow Task\OLE DB - HRM Source.Outputs[OLE DB Source Error Output]" isErrorOut="true" name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn refId="Package\Data Flow Task\OLE DB - HRM Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]" dataType="i4" lineageId="Package\Data Flow Task\OLE DB - HRM Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]" name="ErrorCode" specialFlags="1" />
+                    <outputColumn refId="Package\Data Flow Task\OLE DB - HRM Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]" dataType="i4" lineageId="Package\Data Flow Task\OLE DB - HRM Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]" name="ErrorColumn" specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component refId="Package\Data Flow Task\OLE DB - Sales Source 1" componentClassID="Microsoft.OLEDBSource" contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7" description="OLE DB Source" name="OLE DB - Sales Source 1" usesDispositions="true" version="7">
+              <properties>
+                <property dataType="System.Int32" description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out." name="CommandTimeout">0</property>
+                <property dataType="System.String" description="Specifies the name of the database object used to open a rowset." name="OpenRowset">
+                </property>
+                <property dataType="System.String" description="Specifies the variable that contains the name of the database object used to open a rowset." name="OpenRowsetVariable">
+                </property>
+                <property dataType="System.String" description="The SQL command to be executed." name="SqlCommand" UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">
+                </property>
+                <property dataType="System.String" description="The variable that contains the SQL command to be executed." name="SqlCommandVariable">
+                </property>
+                <property dataType="System.Int32" description="Specifies the column code page to use when code page information is unavailable from the data source." name="DefaultCodePage">1252</property>
+                <property dataType="System.Boolean" description="Forces the use of the DefaultCodePage property value when describing character data." name="AlwaysUseDefaultCodePage">false</property>
+                <property dataType="System.Int32" description="Specifies the mode used to access the database." name="AccessMode" typeConverter="AccessMode">0</property>
+                <property dataType="System.String" description="The mappings between the parameters in the SQL command and variables." name="ParameterMapping">
+                </property>
+              </properties>
+              <connections>
+                <connection refId="Package\Data Flow Task\OLE DB - Sales Source 1.Connections[OleDbConnection]" connectionManagerID="{917F0E09-5758-4978-9139-63612652D5A2}:external" connectionManagerRefId="Project.ConnectionManagers[CM_SS_Sales]" description="The OLE DB runtime connection used to access the database." name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output refId="Package\Data Flow Task\OLE DB - Sales Source 1.Outputs[OLE DB Source Output]" name="OLE DB Source Output">
+                  <externalMetadataColumns isUsed="True" />
+                </output>
+                <output refId="Package\Data Flow Task\OLE DB - Sales Source 1.Outputs[OLE DB Source Error Output]" isErrorOut="true" name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn refId="Package\Data Flow Task\OLE DB - Sales Source 1.Outputs[OLE DB Source Error Output].Columns[ErrorCode]" dataType="i4" lineageId="Package\Data Flow Task\OLE DB - Sales Source 1.Outputs[OLE DB Source Error Output].Columns[ErrorCode]" name="ErrorCode" specialFlags="1" />
+                    <outputColumn refId="Package\Data Flow Task\OLE DB - Sales Source 1.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]" dataType="i4" lineageId="Package\Data Flow Task\OLE DB - Sales Source 1.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]" name="ErrorColumn" specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component refId="Package\Data Flow Task\OLE DB Source" componentClassID="Microsoft.OLEDBSource" contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7" description="OLE DB Source" name="OLE DB Source" usesDispositions="true" version="7">
+              <properties>
+                <property dataType="System.Int32" description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out." name="CommandTimeout">0</property>
+                <property dataType="System.String" description="Specifies the name of the database object used to open a rowset." name="OpenRowset">
+                </property>
+                <property dataType="System.String" description="Specifies the variable that contains the name of the database object used to open a rowset." name="OpenRowsetVariable">
+                </property>
+                <property dataType="System.String" description="The SQL command to be executed." name="SqlCommand" UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">
+                </property>
+                <property dataType="System.String" description="The variable that contains the SQL command to be executed." name="SqlCommandVariable">
+                </property>
+                <property dataType="System.Int32" description="Specifies the column code page to use when code page information is unavailable from the data source." name="DefaultCodePage">1252</property>
+                <property dataType="System.Boolean" description="Forces the use of the DefaultCodePage property value when describing character data." name="AlwaysUseDefaultCodePage">false</property>
+                <property dataType="System.Int32" description="Specifies the mode used to access the database." name="AccessMode" typeConverter="AccessMode">0</property>
+                <property dataType="System.String" description="The mappings between the parameters in the SQL command and variables." name="ParameterMapping">
+                </property>
+              </properties>
+              <connections>
+                <connection refId="Package\Data Flow Task\OLE DB Source.Connections[OleDbConnection]" connectionManagerID="{C955E167-8359-48A9-9648-CAA029AF8B09}:external" connectionManagerRefId="Project.ConnectionManagers[CM_SS_DW]" description="The OLE DB runtime connection used to access the database." name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output]" name="OLE DB Source Output">
+                  <externalMetadataColumns isUsed="True" />
+                </output>
+                <output refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output]" isErrorOut="true" name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]" dataType="i4" lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]" name="ErrorCode" specialFlags="1" />
+                    <outputColumn refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]" dataType="i4" lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]" name="ErrorColumn" specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable DTS:refId="Package\Execute SQL Task" DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:Description="Execute SQL Task" DTS:DTSID="{D750FE46-3170-4A31-9AE3-9D83F2E90AE8}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Execute SQL Task" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2025; Â© 2025 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1" DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData SQLTask:Connection="{C955E167-8359-48A9-9648-CAA029AF8B09}" SQLTask:BypassPrepare="False" SQLTask:SqlStatementSource="&#xA;USE Sakila_DW;&#xA;GO&#xA;&#xA;-- ============================================================&#xA;-- PHáº¦N 1: INSERT dÃ²ng Ä‘áº·c biá»‡t date_key = -1&#xA;-- DÃ¹ng cho return_date_key khi khÃ¡ch chÆ°a tráº£ Ä‘Ä©a (return_date IS NULL)&#xA;-- Cáº§n cÃ³ TRÆ¯á»šC khi load Fact_Sale Ä‘á»ƒ Lookup khÃ´ng bá»‹ lá»—i FK&#xA;-- ============================================================&#xA;&#xA;PRINT 'Báº¯t Ä‘áº§u PHáº¦N 1: Kiá»ƒm tra vÃ  insert dÃ²ng Ä‘áº·c biá»‡t date_key = -1...';&#xA;&#xA;IF NOT EXISTS (SELECT 1 FROM dw.Dim_Date WHERE date_key = -1)&#xA;BEGIN&#xA;    INSERT INTO dw.Dim_Date (&#xA;        date_key,&#xA;        date,&#xA;        day_of_week,&#xA;        day_name,&#xA;        day_of_month,&#xA;        day_of_year,&#xA;        week_of_year,&#xA;        month_of_year,&#xA;        month_name,&#xA;        quarter_of_year,&#xA;        year,&#xA;        is_weekend,&#xA;        is_special_day,&#xA;        special_day&#xA;    )&#xA;    VALUES (&#xA;        -1,         -- date_key Ä‘áº·c biá»‡t&#xA;        NULL,       -- khÃ´ng cÃ³ ngÃ y thá»±c táº¿&#xA;        0,          -- day_of_week = 0 (khÃ´ng xÃ¡c Ä‘á»‹nh)&#xA;        'N/A',      -- day_name&#xA;        0,          -- day_of_month&#xA;        0,          -- day_of_year&#xA;        0,          -- week_of_year&#xA;        0,          -- month_of_year&#xA;        'N/A',      -- month_name&#xA;        0,          -- quarter_of_year&#xA;        0,          -- year&#xA;        0,          -- is_weekend&#xA;        0,          -- is_special_day&#xA;        N'ChÆ°a tráº£ Ä‘Ä©a'  -- special_day â€” mÃ´ táº£ nghiá»‡p vá»¥&#xA;    );&#xA;    PRINT '  â†’ ÄÃ£ insert dÃ²ng date_key = -1 (ChÆ°a tráº£ Ä‘Ä©a).';&#xA;END&#xA;ELSE&#xA;BEGIN&#xA;    PRINT '  â†’ DÃ²ng date_key = -1 Ä‘Ã£ tá»“n táº¡i, bá» qua insert.';&#xA;END&#xA;&#xA;GO&#xA;&#xA;-- ============================================================&#xA;-- PHáº¦N 2: Sinh tá»± Ä‘á»™ng cÃ¡c ngÃ y tá»« 2000-01-01 Ä‘áº¿n 2030-12-31&#xA;-- LÆ°u Ã½: Chá»‰ xÃ³a date_key &gt; 0 Ä‘á»ƒ giá»¯ nguyÃªn dÃ²ng -1 á»Ÿ PHáº¦N 1&#xA;-- ============================================================&#xA;&#xA;PRINT '';&#xA;PRINT 'Báº¯t Ä‘áº§u PHáº¦N 2: Sinh dá»¯ liá»‡u Dim_Date 2000-01-01 â†’ 2030-12-31...';&#xA;&#xA;-- XÃ³a dá»¯ liá»‡u ngÃ y cÅ© (giá»¯ láº¡i dÃ²ng -1)&#xA;DELETE FROM dw.Dim_Date WHERE date_key &gt; 0;&#xA;PRINT '  â†’ ÄÃ£ xÃ³a dá»¯ liá»‡u cÅ© (date_key &gt; 0).';&#xA;&#xA;-- Khai bÃ¡o biáº¿n vÃ²ng láº·p&#xA;DECLARE @StartDate DATE = '2000-01-01';&#xA;DECLARE @EndDate   DATE = '2030-12-31';&#xA;DECLARE @Current   DATE = @StartDate;&#xA;&#xA;-- VÃ²ng láº·p sinh tá»«ng ngÃ y&#xA;WHILE @Current &lt;= @EndDate&#xA;BEGIN&#xA;    INSERT INTO dw.Dim_Date (&#xA;        date_key,&#xA;        date,&#xA;        day_of_week,&#xA;        day_name,&#xA;        day_of_month,&#xA;        day_of_year,&#xA;        week_of_year,&#xA;        month_of_year,&#xA;        month_name,&#xA;        quarter_of_year,&#xA;        year,&#xA;        is_weekend,&#xA;        is_special_day,&#xA;        special_day&#xA;    )&#xA;    VALUES (&#xA;        -- date_key: Ä‘á»‹nh dáº¡ng YYYYMMDD&#xA;        CAST(FORMAT(@Current, 'yyyyMMdd') AS INT),&#xA;&#xA;        -- date&#xA;        @Current,&#xA;&#xA;        -- day_of_week: 1=Sunday, 2=Monday ... 7=Saturday&#xA;        DATEPART(WEEKDAY, @Current),&#xA;&#xA;        -- day_name&#xA;        DATENAME(WEEKDAY, @Current),&#xA;&#xA;        -- day_of_month&#xA;        DAY(@Current),&#xA;&#xA;        -- day_of_year&#xA;        DATEPART(DAYOFYEAR, @Current),&#xA;&#xA;        -- week_of_year (ISO)&#xA;        DATEPART(ISO_WEEK, @Current),&#xA;&#xA;        -- month_of_year&#xA;        MONTH(@Current),&#xA;&#xA;        -- month_name&#xA;        DATENAME(MONTH, @Current),&#xA;&#xA;        -- quarter_of_year&#xA;        DATEPART(QUARTER, @Current),&#xA;&#xA;        -- year&#xA;        YEAR(@Current),&#xA;&#xA;        -- is_weekend: Thá»© 7 (7) hoáº·c Chá»§ Nháº­t (1)&#xA;        CASE WHEN DATEPART(WEEKDAY, @Current) IN (1, 7) THEN 1 ELSE 0 END,&#xA;&#xA;        -- is_special_day: NgÃ y lá»… Viá»‡t Nam&#xA;        CASE&#xA;            WHEN FORMAT(@Current, 'MM-dd') = '01-01' THEN 1  -- Táº¿t DÆ°Æ¡ng lá»‹ch&#xA;            WHEN FORMAT(@Current, 'MM-dd') = '04-30' THEN 1  -- Giáº£i phÃ³ng miá»n Nam&#xA;            WHEN FORMAT(@Current, 'MM-dd') = '05-01' THEN 1  -- Quá»‘c táº¿ Lao Ä‘á»™ng&#xA;            WHEN FORMAT(@Current, 'MM-dd') = '09-02' THEN 1  -- Quá»‘c khÃ¡nh&#xA;            WHEN FORMAT(@Current, 'MM-dd') = '12-25' THEN 1  -- GiÃ¡ng sinh&#xA;            WHEN FORMAT(@Current, 'MM-dd') = '11-24' THEN 1  -- NgÃ y VÄƒn HÃ³a Viá»‡t Nam&#xA;            ELSE 0&#xA;        END,&#xA;&#xA;        -- special_day&#xA;        CASE&#xA;            WHEN FORMAT(@Current, 'MM-dd') = '01-01' THEN N'Táº¿t DÆ°Æ¡ng Lá»‹ch'&#xA;            WHEN FORMAT(@Current, 'MM-dd') = '04-30' THEN N'NgÃ y Giáº£i PhÃ³ng Miá»n Nam'&#xA;            WHEN FORMAT(@Current, 'MM-dd') = '05-01' THEN N'Quá»‘c Táº¿ Lao Äá»™ng'&#xA;            WHEN FORMAT(@Current, 'MM-dd') = '09-02' THEN N'Quá»‘c KhÃ¡nh'&#xA;            WHEN FORMAT(@Current, 'MM-dd') = '12-25' THEN N'GiÃ¡ng Sinh'&#xA;            WHEN FORMAT(@Current, 'MM-dd') = '11-24' THEN N'NgÃ y VÄƒn HÃ³a Viá»‡t Nam'&#xA;            ELSE NULL&#xA;        END&#xA;    );&#xA;&#xA;    SET @Current = DATEADD(DAY, 1, @Current);&#xA;END;&#xA;&#xA;PRINT 'PHáº¦N 2 hoÃ n thÃ nh.';&#xA;&#xA;-- Kiá»ƒm tra káº¿t quáº£ tá»•ng thá»ƒ&#xA;PRINT '';&#xA;PRINT '=== Kiá»ƒm tra káº¿t quáº£ ===';&#xA;SELECT&#xA;    COUNT(*)                                        AS tong_so_dong,&#xA;    COUNT(CASE WHEN date_key = -1 THEN 1 END)       AS dong_dac_biet,&#xA;    COUNT(CASE WHEN date_key &gt; 0  THEN 1 END)       AS dong_ngay_thuong,&#xA;    MIN(CASE WHEN date_key &gt; 0 THEN date END)       AS ngay_dau_tien,&#xA;    MAX(CASE WHEN date_key &gt; 0 THEN date END)       AS ngay_cuoi_cung,&#xA;    COUNT(CASE WHEN is_special_day = 1 THEN 1 END)  AS so_ngay_le&#xA;FROM dw.Dim_Date;&#xA;GO&#xA;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable DTS:refId="Package\Execute SQL Task 1" DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:Description="Execute SQL Task" DTS:DTSID="{9B1A39BB-EE56-469F-982B-887A5274CF58}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Execute SQL Task 1" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2025; Â© 2025 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1" DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint DTS:refId="Package.PrecedenceConstraints[Constraint]" DTS:CreationName="" DTS:DTSID="{9703E511-F27C-4FB9-BB5F-B73F76D1C446}" DTS:From="Package\Execute SQL Task" DTS:LogicalAnd="True" DTS:ObjectName="Constraint" DTS:To="Package\Execute SQL Task 1" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="150.4,41.6"
+          Id="Package\Data Flow Task"
+          TopLeft="756.928573028165,70.499999943025" />
+        <NodeLayout
+          Size="162.4,41.6"
+          Id="Package\Execute SQL Task"
+          TopLeft="372.142857935052,54.2941175994679" />
+        <NodeLayout
+          Size="172,41.6"
+          Id="Package\Execute SQL Task 1"
+          TopLeft="303.571429217652,192.705882184027" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="453.342857935052,95.8941175994679">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-63.7714287173991,96.8117645845591"
+              Start="0,0"
+              End="-63.7714287173991,89.3117645845591">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,44.4058822922795" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,44.4058822922795"
+                    Point2="0,48.4058822922795"
+                    Point3="-4,48.4058822922795" />
+                  <mssgle:LineSegment
+                    End="-59.7714287173991,48.4058822922795" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-59.7714287173991,48.4058822922795"
+                    Point2="-63.7714287173991,48.4058822922795"
+                    Point3="-63.7714287173991,52.4058822922795" />
+                  <mssgle:LineSegment
+                    End="-63.7714287173991,89.3117645845591" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\Data Flow Task">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
+        <NodeLayout
+          Size="182.4,41.6"
+          Id="Package\Data Flow Task\OLE DB - HRM Source"
+          TopLeft="46.9999992996454,73.9999988973141" />
+        <NodeLayout
+          Size="193.6,41.6"
+          Id="Package\Data Flow Task\OLE DB - Sales Source 1"
+          TopLeft="306.999995425344,68.9999989718199" />
+        <NodeLayout
+          Size="149.6,41.6"
+          Id="Package\Data Flow Task\OLE DB Source"
+          TopLeft="516.9999922961,355.999994695187" />
+        <NodeLayout
+          Size="141.6,41.6"
+          Id="Package\Data Flow Task\ODBC Source"
+          TopLeft="115.000000244805,211.823529226093" />
+        <NodeLayout
+          Size="150.4,41.6"
+          Id="Package\Data Flow Task\ODBC Source 1"
+          TopLeft="490.257143895663,228.729411581045" />
+        <NodeLayout
+          Size="157.6,41.6"
+          Id="Package\Data Flow Task\ADO NET Source"
+          TopLeft="608.571429866917,146.070588168265" />
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Data Flow Task\OLE DB - Sales Source 1">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Data Flow Task\OLE DB - HRM Source">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Data Flow Task\OLE DB Source">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Data Flow Task\ODBC Source 1">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Data Flow Task\ADO NET Source">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>

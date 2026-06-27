@@ -1,0 +1,42 @@
+# Secrets and local connection configuration
+03_AIRBYTE/airbyte_home_snapshot/
+04_DBT/user_dbt_config/
+**/profiles.yml
+**/*.kubeconfig
+**/*.conmgr
+**/*.params
+
+# Original SSIS package/project files embed local connection configuration.
+# Sanitized public copies are stored under Metadata_and_Helper_Code/Public_Sanitized.
+/02_SSIS/Sakila_DW_Optimized/Package.dtsx
+/02_SSIS/Sakila_DW_Optimized/Sakila_DW/Package.dtsx
+/02_SSIS/Sakila_DW_Optimized/Sakila_DW/Sakila_DW.dtproj
+
+# Generated artifacts that may embed connection strings
+**/*.ispac
+**/bin/
+**/obj/
+**/target/
+
+# Logs may contain server names, SQL text, or connector diagnostics
+**/logs/
+*.log
+
+# Local IDE/user state
+**/.vs/
+**/*.user
+**/*.suo
+**/*.vsidx
+
+# Local Python environments and caches
+**/.venv/
+**/__pycache__/
+*.py[cod]
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Local integrity inventory includes hashes/paths of ignored secret files
+99_INVENTORY/MANIFEST_SHA256.csv
